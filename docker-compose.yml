@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  mongo:
+    image: mongo:latest
+
+  redis:
+    image: redis:latest 
+
+  tyk_gateway:
+    image: tykio/tyk-gateway
+    volumes: 
+      - ./conf/standalone.conf:/opt/tyk-gateway/tyk.conf
+      - ./apps:/opt/tyk-gateway/apps
+      
+    depends_on: 
+      - redis
+
+    ports: 
+      - 8080:8080 
+
+  tyk_dashboard:
+    image: tykio/tyk-dashboard
+    ports: 
+      - 3000:3000
+    depends_on: 
+      - redis 
+      - mongo
+
+  
